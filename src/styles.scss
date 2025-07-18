@@ -1,1 +1,66 @@
-/* You can add global styles to this file, and also import other style files */
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+// Define the palettes for your theme using the Material 3 color tokens.
+$primary: mat.m2-define-palette(mat.$m2-indigo-palette);
+$accent: mat.m2-define-palette(mat.$m2-pink-palette, A200, A100, A400);
+$warn: mat.m2-define-palette(mat.$m2-red-palette);
+
+// Create the theme object. A theme consists of configurations for individual
+// theming systems such as "color" or "typography".
+$theme: mat.m2-define-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  )
+));
+
+// Include theme styles for core and each component used in your app.
+@include mat.all-component-themes($theme);
+
+// Alternative simpler approach if the above doesn't work:
+// Just use the default Material theme
+// @include mat.all-component-themes(mat.m2-define-light-theme((
+//   color: (
+//     primary: mat.m2-define-palette(mat.$m2-indigo-palette),
+//     accent: mat.m2-define-palette(mat.$m2-pink-palette),
+//     warn: mat.m2-define-palette(mat.$m2-red-palette),
+//   )
+// )));
+
+// Global styles
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+// Snackbar styles
+.success-snackbar {
+  --mdc-snackbar-container-color: #4caf50;
+  --mdc-snackbar-supporting-text-color: white;
+}
+
+.error-snackbar {
+  --mdc-snackbar-container-color: #f44336;
+  --mdc-snackbar-supporting-text-color: white;
+}
+
+// Custom utility classes
+.full-width {
+  width: 100%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.mt-2 {
+  margin-top: 16px;
+}
+
+.mb-2 {
+  margin-bottom: 16px;
+}

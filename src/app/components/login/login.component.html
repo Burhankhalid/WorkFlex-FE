@@ -58,6 +58,12 @@
             <span *ngIf="isLoading()">Logging in...</span>
           </button>
         </div>
+
+        <div class="error-container" *ngIf="errorMessage">
+          <mat-error *ngIf="errorMessage" class="error-message">
+            {{ errorMessage }}
+          </mat-error>
+        </div>
       </form>
     </mat-card-content>
   </mat-card>

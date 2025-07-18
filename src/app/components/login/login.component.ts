@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { AuthService } from '../../services/auth.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -34,6 +35,9 @@ export class LoginComponent {
   private authService = inject(AuthService);
   private router = inject(Router);
   private snackBar = inject(MatSnackBar);
+  private toastr = inject(ToastrService);
+
+  public errorMessage: string = '';
 
   loginForm: FormGroup;
   hidePassword = signal(true);
@@ -58,18 +62,20 @@ export class LoginComponent {
       this.authService.login(this.loginForm.value).subscribe({
         next: (response) => {
           this.isLoading.set(false);
-          this.snackBar.open('Login successful!', 'Close', {
-            duration: 3000,
-            panelClass: ['success-snackbar']
-          });
+          this.toastr.success('Login successful!', 'Success');
+          // this.snackBar.open('Login successful!', 'Close', {
+          //   duration: 3000,
+          //   panelClass: ['success-snackbar']
+          // });
           this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           this.isLoading.set(false);
-          this.snackBar.open('Login failed. Please check your credentials.', 'Close', {
-            duration: 3000,
-            panelClass: ['error-snackbar']
-          });
+          this.errorMessage = error?.error || 'Login failed. Please try again.';
+          // this.snackBar.open(error?.error, 'Close', {
+          //   duration: 3000,
+          //   panelClass: ['error-snackbar']
+          // });
           console.error('Login error:', error);
         }
       });

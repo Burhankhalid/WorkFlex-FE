@@ -63,19 +63,11 @@ export class LoginComponent {
         next: (response) => {
           this.isLoading.set(false);
           this.toastr.success('Login successful!', 'Success');
-          // this.snackBar.open('Login successful!', 'Close', {
-          //   duration: 3000,
-          //   panelClass: ['success-snackbar']
-          // });
           this.router.navigate(['/dashboard']);
         },
         error: (error) => {
           this.isLoading.set(false);
-          this.errorMessage = error?.error || 'Login failed. Please try again.';
-          // this.snackBar.open(error?.error, 'Close', {
-          //   duration: 3000,
-          //   panelClass: ['error-snackbar']
-          // });
+          this.errorMessage = error?.error?.message || 'Login failed. Please try again.';
           console.error('Login error:', error);
         }
       });

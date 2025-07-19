@@ -1,0 +1,376 @@
+.workations-container {
+  padding: 20px;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 300px;
+  
+  .spinner {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #007bff;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin-bottom: 16px;
+  }
+  
+  p {
+    color: #6c757d;
+    font-size: 16px;
+  }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.error-container {
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  border-radius: 8px;
+  padding: 20px;
+  margin: 20px 0;
+  
+  .error-message {
+    color: #721c24;
+    margin-bottom: 12px;
+    font-weight: 500;
+  }
+  
+  .retry-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    
+    &:hover {
+      background-color: #c82333;
+    }
+  }
+}
+
+.table-container {
+  background-color: white;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.workations-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  
+  thead {
+    background-color: #f8f9fa;
+    border-bottom: 2px solid #e9ecef;
+    
+    th {
+      padding: 16px 20px;
+      text-align: left;
+      font-weight: 600;
+      font-size: 13px;
+      color: #495057;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      
+      &.sortable-header {
+        cursor: pointer;
+        user-select: none;
+        transition: background-color 0.2s ease;
+        
+        &:hover {
+          background-color: #e9ecef;
+        }
+        
+        &.sorted {
+          background-color: #e3f2fd;
+          color: #1976d2;
+        }
+        
+        .header-content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          
+          .sort-icon {
+            color: #000000 !important; /* Force black color for sort icons */
+            font-size: 14px !important; /* Slightly larger for better visibility */
+            font-weight: bold !important;
+            line-height: 1.2;
+            letter-spacing: 0.1em; /* Add slight spacing between up/down arrows */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px; /* Add space between up and down arrows */
+          }
+        }
+      }
+    }
+  }
+  
+  tbody {
+    tr.workation-row {
+      border-bottom: 1px solid #e9ecef;
+      transition: background-color 0.2s ease;
+      
+      &:hover {
+        background-color: #e3f2fd;
+      }
+      
+      &:last-child {
+        border-bottom: none;
+      }
+      
+      td {
+        padding: 16px 20px;
+        vertical-align: middle;
+        font-size: 14px;
+      }
+      
+      .employee-cell {
+        font-weight: 600;
+        color: #212529;
+      }
+      
+      .country-cell {
+        .country-info {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          
+          .flag {
+            font-size: 18px;
+          }
+          
+          .country-name {
+            color: #495057;
+          }
+        }
+      }
+      
+      .date-cell {
+        color: #495057;
+        font-family: 'Monaco', 'Menlo', monospace;
+      }
+      
+      .working-days-cell {
+        font-weight: 600;
+        color: #212529;
+        text-align: center;
+      }
+      
+      .risk-cell {
+        .risk-info {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          
+          .risk-icon {
+            font-size: 16px;
+          }
+          
+          .risk-text {
+            font-weight: 600;
+            font-size: 13px;
+          }
+          
+          &.risk-high {
+            .risk-text {
+              color: #dc3545;
+            }
+          }
+          
+          &.risk-no {
+            .risk-text {
+              color: #fd7e14;
+            }
+          }
+          
+          &.risk-low {
+            .risk-text {
+              color: #28a745;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+/* Force black styling for all sort icon content */
+.sort-icon,
+.sort-icon * {
+  color: #000000 !important;
+}
+
+/* Override any blue colors that might be applied */
+.sortable-header .sort-icon,
+.sortable-header.sorted .sort-icon,
+.sorted .sort-icon {
+  color: #000000 !important;
+}
+
+/* Additional styling for sort icons if using Unicode arrows */
+.sort-icon {
+  &::before {
+    // content: "▲"; /* Up arrow */
+    display: block;
+    font-size: 8px;
+    line-height: 1;
+    color: #000000 !important;
+  }
+  
+  &::after {
+    // content: "▼"; /* Down arrow */
+    display: block;
+    font-size: 8px;
+    line-height: 1;
+    color: #000000 !important;
+    margin-top: 2px; /* Space between arrows */
+  }
+  
+  /* When column is sorted ascending, keep arrows black but make them bolder */
+  &.asc::before {
+    color: #000000 !important;
+    font-weight: 900;
+    transform: scale(1.2);
+  }
+  
+  /* When column is sorted descending, keep arrows black but make them bolder */
+  &.desc::after {
+    color: #000000 !important;
+    font-weight: 900;
+    transform: scale(1.2);
+  }
+}
+
+// Responsive design
+@media (max-width: 768px) {
+  .workations-container {
+    padding: 10px;
+  }
+  
+  .workations-table {
+    font-size: 12px;
+    
+    thead th {
+      padding: 12px 10px;
+      font-size: 11px;
+      
+      .sort-icon {
+        font-size: 10px;
+      }
+    }
+    
+    tbody td {
+      padding: 12px 10px;
+    }
+  }
+}
+
+@media (max-width: 576px) {
+  .table-container {
+    overflow-x: auto;
+  }
+  
+  .workations-table {
+    min-width: 800px;
+  }
+}
+
+.risk-cell {
+  .risk-info {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    
+    .risk-icon {
+      width: 24px;
+      height: 24px;
+      flex-shrink: 0;
+      
+      // Optional: Add some hover effects
+      transition: transform 0.2s ease;
+      
+      &:hover {
+        transform: scale(1.1);
+      }
+    }
+    
+    .risk-text {
+      font-weight: 500;
+    }
+  }
+  
+  // Risk-specific styling (if you want to add background colors or borders)
+  .risk-high {
+    .risk-text {
+      color: #dc3545; // Bootstrap danger red
+    }
+  }
+  
+  .risk-no {
+    .risk-text {
+      color: #ffc107; // Bootstrap warning yellow
+    }
+  }
+  
+  .risk-low {
+    .risk-text {
+      color: #28a745; // Bootstrap success green
+    }
+  }
+  
+  .risk-unknown {
+    .risk-text {
+      color: #6c757d; // Bootstrap secondary gray
+    }
+  }
+}
+
+/* Table border styles */
+.bordered-table {
+  border-collapse: collapse;
+  border: 1px solid #e0e0e0;
+}
+
+.bordered-column {
+  border-right: 1px solid #e0e0e0;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+/* Remove right border from last column to avoid double border */
+.bordered-column:last-child {
+  border-right: none;
+}
+
+/* Optional: Different border color for header */
+thead .bordered-column {
+  border-bottom: 2px solid #d0d0d0;
+}
+
+/* Optional: Hover effect that respects borders */
+.workation-row:hover .bordered-column {
+  background-color: #f8f9fa;
+}
+
+/* Flag styling to work well with borders */
+.flag {
+  width: 24px;
+  height: auto;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 8px;
+}

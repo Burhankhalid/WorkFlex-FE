@@ -1,0 +1,125 @@
+<div class="workations-container">
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading workations...</p>
+  </div>
+
+  <div *ngIf="error" class="error-container">
+    <p class="error-message">{{ error }}</p>
+    <button (click)="loadWorkations()" class="retry-button">Retry</button>
+  </div>
+
+  <div *ngIf="!loading && !error" class="table-container">
+    <table class="workations-table bordered-table">
+      <thead>
+        <tr>
+          <th 
+            class="sortable-header bordered-column"
+            [class.sorted]="isSorted('employee')"
+            (click)="sort('employee')">
+            <div class="header-content">
+              <span>Employee</span>
+              <span class="sort-icon">{{ getSortIcon('employee') }}</span>
+            </div>
+          </th>
+          <th 
+            class="sortable-header bordered-column"
+            [class.sorted]="isSorted('origin')"
+            (click)="sort('origin')">
+            <div class="header-content">
+              <span>Origin</span>
+              <span class="sort-icon">{{ getSortIcon('origin') }}</span>
+            </div>
+          </th>
+          <th 
+            class="sortable-header bordered-column"
+            [class.sorted]="isSorted('destination')"
+            (click)="sort('destination')">
+            <div class="header-content">
+              <span>Destination</span>
+              <span class="sort-icon">{{ getSortIcon('destination') }}</span>
+            </div>
+          </th>
+          <th 
+            class="sortable-header bordered-column"
+            [class.sorted]="isSorted('start')"
+            (click)="sort('start')">
+            <div class="header-content">
+              <span>Start</span>
+              <span class="sort-icon">{{ getSortIcon('start') }}</span>
+            </div>
+          </th>
+          <th 
+            class="sortable-header bordered-column"
+            [class.sorted]="isSorted('end')"
+            (click)="sort('end')">
+            <div class="header-content">
+              <span>End</span>
+              <span class="sort-icon">{{ getSortIcon('end') }}</span>
+            </div>
+          </th>
+          <th 
+            class="sortable-header bordered-column"
+            [class.sorted]="isSorted('workingDays')"
+            (click)="sort('workingDays')">
+            <div class="header-content">
+              <span>Working days</span>
+              <span class="sort-icon">{{ getSortIcon('workingDays') }}</span>
+            </div>
+          </th>
+          <th 
+            class="sortable-header bordered-column"
+            [class.sorted]="isSorted('risk')"
+            (click)="sort('risk')">
+            <div class="header-content">
+              <span>Risk</span>
+              <span class="sort-icon">{{ getSortIcon('risk') }}</span>
+            </div>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr 
+          *ngFor="let workation of sortedWorkations; trackBy: trackByWorkation"
+          class="workation-row">
+          <td class="employee-cell bordered-column">
+            {{ workation.employee }}
+          </td>
+          <td class="country-cell bordered-column">
+            <div class="country-info">
+              <img class="flag" [src]="getCountryFlag(workation.origin.code)" [alt]="workation.origin.code + ' flag'" style="width: 24px; height: auto;">
+              <span class="country-name">{{ workation.origin.country }}</span>
+            </div>
+          </td>
+          <td class="country-cell bordered-column">
+            <div class="country-info">
+              <img class="flag" [src]="getCountryFlag(workation.destination.code)" [alt]="workation.destination.code + ' flag'" style="width: 24px; height: auto;">
+              <span class="country-name">{{ workation.destination.country }}</span>
+            </div>
+          </td>
+          <td class="date-cell bordered-column">
+            {{ workation.start }}
+          </td>
+          <td class="date-cell bordered-column">
+            {{ workation.end }}
+          </td>
+          <td class="working-days-cell bordered-column">
+            {{ workation.workingDays }}
+          </td>
+          <td class="risk-cell bordered-column">
+            <div class="risk-info" [class]="getRiskClass(workation.risk)">
+                <img 
+                    class="risk-icon" 
+                    [src]="getRiskIcon(workation.risk)" 
+                    [alt]="getRiskText(workation.risk)"
+                    width="24" 
+                    height="24"
+                >
+                <span class="risk-text">{{ getRiskText(workation.risk) }}</span>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

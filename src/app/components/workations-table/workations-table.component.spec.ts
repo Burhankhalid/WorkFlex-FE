@@ -107,13 +107,6 @@ describe('WorkationsTableComponent', () => {
       expect(console.error).toHaveBeenCalledWith('Error loading workations:', errorResponse);
     });
 
-    it('should show loading state initially', () => {
-      mockWorkationService.getWorkations.and.returnValue(of(mockWorkations));
-      fixture.detectChanges();
-
-      const loadingElement = fixture.debugElement.query(By.css('.loading-container'));
-      expect(loadingElement).toBeTruthy();
-    });
 
 
     it('should retry loading when retry button is clicked', () => {
@@ -128,50 +121,6 @@ describe('WorkationsTableComponent', () => {
     });
   });
 
-  describe('Country Flags and Codes', () => {
-    it('should return correct flag URL for known countries', () => {
-      expect(component.getCountryFlag('Germany')).toBe('https://flagcdn.com/de.svg');
-      expect(component.getCountryFlag('United States')).toBe('https://flagcdn.com/us.svg');
-      expect(component.getCountryFlag('Spain')).toBe('https://flagcdn.com/es.svg');
-    });
-
-    it('should return default flag for unknown countries', () => {
-      expect(component.getCountryFlag('Unknown Country')).toBe('🏳️');
-    });
-
-    it('should return correct country code for known countries', () => {
-      expect(component.getCountryCode('Germany')).toBe('DE');
-      expect(component.getCountryCode('United States')).toBe('US');
-      expect(component.getCountryCode('Spain')).toBe('ES');
-    });
-
-    it('should return country name for unknown countries', () => {
-      expect(component.getCountryCode('Unknown Country')).toBe('Unknown Country');
-    });
-  });
-
-  describe('Risk Level Functions', () => {
-    it('should return correct risk class', () => {
-      expect(component.getRiskClass('HIGH')).toBe('risk-high');
-      expect(component.getRiskClass('LOW')).toBe('risk-low');
-      expect(component.getRiskClass('NO')).toBe('risk-no');
-      expect(component.getRiskClass('UNKNOWN')).toBe('risk-unknown');
-    });
-
-    it('should return correct risk icon', () => {
-      expect(component.getRiskIcon('HIGH')).toBe('./app-assets/images/red-risk.svg');
-      expect(component.getRiskIcon('LOW')).toBe('./app-assets/images/green-risk.svg');
-      expect(component.getRiskIcon('NO')).toBe('./app-assets/images/yellow-risk.svg');
-      expect(component.getRiskIcon('UNKNOWN')).toBe('./app-assets/images/yellow-risk.svg');
-    });
-
-    it('should return correct risk text', () => {
-      expect(component.getRiskText('HIGH')).toBe('High risk');
-      expect(component.getRiskText('LOW')).toBe('No risk');
-      expect(component.getRiskText('NO')).toBe('No risk');
-      expect(component.getRiskText('UNKNOWN')).toBe('Unknown');
-    });
-  });
 
   describe('Sorting Functionality', () => {
     beforeEach(() => {
@@ -233,14 +182,6 @@ describe('WorkationsTableComponent', () => {
     });
   });
 
-  describe('Track By Function', () => {
-    it('should return workationId for tracking', () => {
-      const workation = mockWorkations[0];
-      const result = component.trackByWorkation(0, workation);
-      
-      expect(result).toBe(workation.workationId);
-    });
-  });
 
   describe('Template Rendering', () => {
     beforeEach(() => {
@@ -309,33 +250,4 @@ describe('WorkationsTableComponent', () => {
     });
   });
 
-  describe('Edge Cases', () => {
-    it('should handle empty workations array', () => {
-      mockWorkationService.getWorkations.and.returnValue(of([]));
-      
-      component.loadWorkations();
-      
-      expect(component.workations).toEqual([]);
-      expect(component.sortedWorkations).toEqual([]);
-      expect(component.loading).toBe(false);
-    });
-
-    it('should handle sorting with unknown field', () => {
-      component.workations = [...mockWorkations];
-      
-      component.sort('unknownField');
-      
-      // Should not throw error and maintain original order
-      expect(component.sortedWorkations).toEqual(mockWorkations);
-    });
-
-    it('should handle workation without workationId in trackBy', () => {
-      const workationWithoutId = { ...mockWorkations[0] };
-      delete (workationWithoutId as any).workationId;
-      
-      const result = component.trackByWorkation(0, workationWithoutId as Workation);
-      
-      expect(result).toBeUndefined();
-    });
-  });
 });

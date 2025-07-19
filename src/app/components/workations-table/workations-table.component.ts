@@ -20,13 +20,24 @@ export class WorkationsTableComponent implements OnInit {
   sortDirection: 'asc' | 'desc' = 'asc';
 
   private countryFlags: { [key: string]: string } = {
-    'DE': 'https://flagcdn.com/de.svg',
-    'US': 'https://flagcdn.com/us.svg', 
-    'UA': 'https://flagcdn.com/ua.svg',
-    'BE': 'https://flagcdn.com/be.svg',
-    'ES': 'https://flagcdn.com/es.svg',
-    'GR': 'https://flagcdn.com/gr.svg',
-    'IN': 'https://flagcdn.com/in.svg'
+    'Germany': 'https://flagcdn.com/de.svg',
+    'United States': 'https://flagcdn.com/us.svg', 
+    'Ukraine': 'https://flagcdn.com/ua.svg',
+    'Belgium': 'https://flagcdn.com/be.svg',
+    'Spain': 'https://flagcdn.com/es.svg',
+    'Greece': 'https://flagcdn.com/gr.svg',
+    'India': 'https://flagcdn.com/in.svg'
+  };
+
+  // Map country names to codes for alt text
+  private countryCodes: { [key: string]: string } = {
+    'Germany': 'DE',
+    'United States': 'US',
+    'Ukraine': 'UA',
+    'Belgium': 'BE',
+    'Spain': 'ES',
+    'Greece': 'GR',
+    'India': 'IN'
   };
 
   constructor(private workationService: WorkationService) {}
@@ -51,25 +62,26 @@ export class WorkationsTableComponent implements OnInit {
     });
   }
 
-  // Add the missing trackBy function
   trackByWorkation(index: number, workation: Workation): any {
-    // Use a unique identifier for each workation
-    // Assuming each workation has unique combination of employee, start, and destination
-    return `${workation.employee}-${workation.start}-${workation.destination.code}`;
+    // Use workationId as the unique identifier
+    return workation.workationId;
   }
 
-  getCountryFlag(countryCode: string): string {
-    return this.countryFlags[countryCode] || '🏳️';
+  getCountryFlag(countryName: string): string {
+    return this.countryFlags[countryName] || '🏳️';
   }
 
+  getCountryCode(countryName: string): string {
+    return this.countryCodes[countryName] || countryName;
+  }
 
   getRiskClass(riskLevel: string): string {
     switch (riskLevel) {
-      case 'HIGH_RISK':
+      case 'HIGH':
         return 'risk-high';
-      case 'NO_RISK':
+      case 'NO':
         return 'risk-no';
-      case 'LOW_RISK':
+      case 'LOW':
         return 'risk-low';
       default:
         return 'risk-unknown';
@@ -78,11 +90,11 @@ export class WorkationsTableComponent implements OnInit {
 
   getRiskIcon(riskLevel: string): string {
     switch (riskLevel) {
-      case 'HIGH_RISK':
+      case 'HIGH':
         return './app-assets/images/red-risk.svg';
-      case 'NO_RISK':
+      case 'NO':
         return './app-assets/images/yellow-risk.svg';
-      case 'LOW_RISK':
+      case 'LOW':
         return './app-assets/images/green-risk.svg';
       default:
         return './app-assets/images/yellow-risk.svg';
@@ -91,28 +103,15 @@ export class WorkationsTableComponent implements OnInit {
 
   getRiskText(riskLevel: string): string {
     switch (riskLevel) {
-      case 'HIGH_RISK':
+      case 'HIGH':
         return 'High risk';
-      case 'NO_RISK':
-      case 'LOW_RISK':
+      case 'NO':
+      case 'LOW':
         return 'No risk';
       default:
         return 'Unknown';
     }
   }
-
-  // getRiskIcon(riskLevel: string): string {
-  //   switch (riskLevel) {
-  //     case 'HIGH_RISK':
-  //       return '🛡️⚠️';
-  //     case 'NO_RISK':
-  //       return '🛡️🟠';
-  //     case 'LOW_RISK':
-  //       return '🛡️✅';
-  //     default:
-  //       return '🛡️';
-  //   }
-  // }
 
   sort(field: string): void {
     if (this.sortField === field) {
@@ -132,24 +131,24 @@ export class WorkationsTableComponent implements OnInit {
           bValue = b.employee;
           break;
         case 'origin':
-          aValue = a.origin.country;
-          bValue = b.origin.country;
+          aValue = a.origin;
+          bValue = b.origin;
           break;
         case 'destination':
-          aValue = a.destination.country;
-          bValue = b.destination.country;
+          aValue = a.destination;
+          bValue = b.destination;
           break;
         case 'start':
         case 'end':
-          aValue = this.parseDate(a[field as keyof Workation] as string);
-          bValue = this.parseDate(b[field as keyof Workation] as string);
+          aValue = new Date(a[field as keyof Workation] as string);
+          bValue = new Date(b[field as keyof Workation] as string);
           break;
         case 'workingDays':
           aValue = a.workingDays;
           bValue = b.workingDays;
           break;
         case 'risk':
-          const riskOrder = { 'HIGH_RISK': 3, 'NO_RISK': 2, 'LOW_RISK': 1 };
+          const riskOrder = { 'HIGH': 3, 'NO': 2, 'LOW': 1 };
           aValue = riskOrder[a.risk as keyof typeof riskOrder] || 0;
           bValue = riskOrder[b.risk as keyof typeof riskOrder] || 0;
           break;
@@ -163,14 +162,7 @@ export class WorkationsTableComponent implements OnInit {
     });
   }
 
-  private parseDate(dateStr: string): Date {
-    const [day, month, year] = dateStr.split('/');
-    return new Date(parseInt(year), parseInt(month) - 1, parseInt(day));
-  }
-
-
   getSortIcon(field: string): string {
-    
     return this.sortDirection === 'asc' ? '↑↓' : '↑↓';
   }
 

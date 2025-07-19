@@ -87,14 +87,20 @@
           </td>
           <td class="country-cell bordered-column">
             <div class="country-info">
-              <img class="flag" [src]="getCountryFlag(workation.origin.code)" [alt]="workation.origin.code + ' flag'" style="width: 24px; height: auto;">
-              <span class="country-name">{{ workation.origin.country }}</span>
+              <img class="flag" 
+                   [src]="getCountryFlag(workation.origin)" 
+                   [alt]="getCountryCode(workation.origin) + ' flag'" 
+                   style="width: 24px; height: auto;">
+              <span class="country-name">{{ workation.origin }}</span>
             </div>
           </td>
           <td class="country-cell bordered-column">
             <div class="country-info">
-              <img class="flag" [src]="getCountryFlag(workation.destination.code)" [alt]="workation.destination.code + ' flag'" style="width: 24px; height: auto;">
-              <span class="country-name">{{ workation.destination.country }}</span>
+              <img class="flag" 
+                   [src]="getCountryFlag(workation.destination)" 
+                   [alt]="getCountryCode(workation.destination) + ' flag'" 
+                   style="width: 24px; height: auto;">
+              <span class="country-name">{{ workation.destination }}</span>
             </div>
           </td>
           <td class="date-cell bordered-column">

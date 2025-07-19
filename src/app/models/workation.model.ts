@@ -1,17 +1,10 @@
-
 export interface Workation {
-  id: number;
+  workationId: string;
   employee: string;
-  origin: {
-    country: string;
-    code: string;
-  };
-  destination: {
-    country: string;
-    code: string;
-  };
+  origin: string;
+  destination: string;
   start: string;
   end: string;
   workingDays: number;
-  risk: 'HIGH_RISK' | 'NO_RISK' | 'LOW_RISK';
+  risk: 'HIGH' | 'NO' | 'LOW';
 }
